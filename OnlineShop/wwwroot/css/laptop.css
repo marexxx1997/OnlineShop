@@ -1,0 +1,14 @@
+﻿body {
+    
+}
+
+@media (min-width:768px) and (max-width:1200px) {
+    .btn-buy {
+        margin-top: 6px;
+        float: none !important;
+    }
+    .card-footer{
+        text-align:center;
+    }
+}
+

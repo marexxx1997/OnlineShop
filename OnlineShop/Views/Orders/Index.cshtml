@@ -1,0 +1,61 @@
+﻿@model List<Order>
+
+@{
+    ViewData["Title"] = "Sve narudžbe";
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h4>Spisak svih vaših narudžbi</h4>
+        </p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID narudžbe</th>
+                    <th>Stavke</th>
+                    <th>Ukupan iznos</th>
+                    @if(User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                    <th>Korisnik</th>
+                        
+                    }
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var order in Model)
+                {
+                    <tr>
+                        <td class="align-middle">@order.Id</td>
+                        <td class="align-middle">
+                            <ul style="list-style-type:none">
+                                @foreach(var item in order.OrderItemsNew)
+                                {
+                                <li>
+                                    <div class="alert alert-info" role="alert">
+                                        @if(item.Laptop != null)
+                                            {
+                                                <span class="badge bg-success">@item.Amount</span><p>[@item.Price.ToString("F") KM] - @item.Laptop.Model</p>
+                                            }
+                                            else
+                                            {
+                                                 <span class="badge bg-success">@item.Amount</span><p>[@item.Price.ToString("F") KM] - @item.Component.Model</p>
+                                            }
+                                        </div>
+                                </li>
+                                }
+                            </ul>
+                        </td>
+                        <td class="align-middle">
+                            @order.OrderItemsNew.Select(m=>(m.Laptop.Price * m.Amount) + (m.Component.Price * m.Amount)).Sum().ToString("F") KM
+                        </td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <td class="align-middle"> @order.User.FullName </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
